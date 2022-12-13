@@ -139,6 +139,7 @@
 		        <version>0.7.2.201409121644</version>
 		        <executions>
 		            <execution>
+		                <?m2e execute onConfiguration,onIncremental?>
 		                <id>jacoco-initialize</id>
 		                <phase>process-resources</phase>
 		                <goals>
