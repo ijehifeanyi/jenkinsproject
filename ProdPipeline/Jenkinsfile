@@ -7,8 +7,8 @@ pipeline {
     agent any
 
     environment {
-        cluster = "vproprod"
-        service = "vproprodsvc"
+        cluster = "vproprodnew"
+        service = "vproappprodfreshsvc"
     }
 
     stages {
