@@ -42,6 +42,7 @@ pipeline {
                 }
             }
         }
+    }
 
         stage('Test'){
             steps {
@@ -109,8 +110,9 @@ pipeline {
                 script {
                     def dockerImage = docker.build('java-app', "./Docker-files/app/multistage/")
                     dockerImage.push('ijehifeanyi/java-app')
-            } 
-        }    
+                } 
+            }  
+        }  
        /* stage('Upload App Image') {
           steps{
             script {
@@ -133,7 +135,7 @@ pipeline {
         }
         }*/
 
-    }
+    
     post {
         always {
             echo 'Slack Notifications.'
