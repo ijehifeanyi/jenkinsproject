@@ -15,7 +15,7 @@ pipeline {
 		NEXUS_PASS = 'admin123'
 		RELEASE_REPO = 'vprofile-release'
 		CENTRAL_REPO = 'vpro-maven-central'
-		NEXUSIP = '172.31.6.42'
+		NEXUSIP = '172.31.95.133'
 		NEXUSPORT = '8081'
 		NEXUS_GRP_REPO = 'vpro-maven-group'
         NEXUS_LOGIN = 'nexuslogin'
@@ -104,21 +104,11 @@ pipeline {
             }
         }
 
-        stage('Build App Image') {
+        stage('Build') {
             steps {
                 script {
-                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
-                }
-            }
-        }
-        
-        stage('Push to Docker Hub') {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                }
-                sh 'docker tag appRegistry ijehifeanyi/web'
-                sh 'docker push ijehifeanyi/web'
+                    def dockerImage = docker.build('java-app', "./Docker-files/app/multistage/")
+                    dockerImage.push('ijehifeanyi/java-app')
             } 
         }    
        /* stage('Upload App Image') {
