@@ -48,7 +48,6 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
-
         }
 
         stage('Checkstyle Analysis'){
@@ -105,16 +104,15 @@ pipeline {
             }
         }
 
-        stage('Build') {
+        stage('Build App Image') {
             steps {
                 script {
-                    def dockerImage = docker.build('java-app', "./Docker-files/app/multistage/")
-                    dockerImage.push('ijehifeanyi/java-app')
+                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
                 } 
             }  
         } 
-    } 
-       /* stage('Upload App Image') {
+     
+        stage('Upload App Image') {
           steps{
             script {
               docker.withRegistry( vprofileRegistry, registryCredential ) {
@@ -134,9 +132,8 @@ pipeline {
                 } 
             }
         }
-        }*/
+    }
 
-    
     post {
         always {
             echo 'Slack Notifications.'
