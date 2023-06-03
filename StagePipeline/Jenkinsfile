@@ -24,8 +24,8 @@ pipeline {
         registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = '847974153257.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg'
         vprofileRegistry = "https://847974153257.dkr.ecr.us-east-1.amazonaws.com"
-        cluster = "demovpro"
-        service = "vpronewsvc"
+        cluster = "vprostaging"
+        service = "vprostagesvc"
         DOCKER_PASSWORD = 'Default1987@'
         DOCKER_USERNAME = 'ifyejay@gmail.com'
     }
@@ -122,8 +122,6 @@ pipeline {
             }
           }
         }
-
-
 
         stage('Deploy to ECS staging') {
             steps {
