@@ -15,7 +15,7 @@ pipeline {
 		NEXUS_PASS = 'admin123'
 		RELEASE_REPO = 'vprofile-release'
 		CENTRAL_REPO = 'vpro-maven-central'
-		NEXUSIP = '172.31.95.133'
+		NEXUSIP = '172.31.6.42'
 		NEXUSPORT = '8081'
 		NEXUS_GRP_REPO = 'vpro-maven-group'
         NEXUS_LOGIN = 'nexuslogin'
@@ -24,8 +24,10 @@ pipeline {
         registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = '847974153257.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg'
         vprofileRegistry = "https://847974153257.dkr.ecr.us-east-1.amazonaws.com"
-        cluster = "vprostaging"
-        service = "vprostagesvc"
+        cluster = "demovpro"
+        service = "vpronewsvc"
+        DOCKER_PASSWORD = 'Default1987@'
+        DOCKER_USERNAME = 'ifyejay@gmail.com'
     }
 
     stages {
@@ -51,7 +53,6 @@ pipeline {
         stage('Checkstyle Analysis'){
             steps {
                 sh 'mvn checkstyle:checkstyle'
-                //tescheckt
             }
         }
 
@@ -77,7 +78,7 @@ pipeline {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don'ssdt
+                    // true = set pipeline to UNSTABLE, false = don't
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -111,7 +112,16 @@ pipeline {
             }
         }
         
-        stage('Upload App Image') {
+        stage('Push to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockercreds', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
+                }
+                sh 'docker tag appRegistry ijehifeanyi/web'
+                sh 'docker push ijehifeanyi/web'
+            } 
+        }    
+       /* stage('Upload App Image') {
           steps{
             script {
               docker.withRegistry( vprofileRegistry, registryCredential ) {
@@ -122,6 +132,8 @@ pipeline {
           }
         }
 
+
+
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -129,11 +141,11 @@ pipeline {
                 } 
             }
         }
-    }
+    }*/
     post {
         always {
             echo 'Slack Notifications.'
-            slackSend channel: '#jenkins-cicd',
+            slackSend channel: '#slacknotification',
                 color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
         }
