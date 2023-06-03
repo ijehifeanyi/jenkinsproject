@@ -15,7 +15,7 @@ pipeline {
 		NEXUS_PASS = 'admin123'
 		RELEASE_REPO = 'vprofile-release'
 		CENTRAL_REPO = 'vpro-maven-central'
-		NEXUSIP = '172.31.6.42'
+		NEXUSIP = '172.31.95.133'
 		NEXUSPORT = '8081'
 		NEXUS_GRP_REPO = 'vpro-maven-group'
         NEXUS_LOGIN = 'nexuslogin'
@@ -24,8 +24,8 @@ pipeline {
         registryCredential = 'ecr:us-east-1:awscreds'
         appRegistry = '847974153257.dkr.ecr.us-east-1.amazonaws.com/vprofileappimg'
         vprofileRegistry = "https://847974153257.dkr.ecr.us-east-1.amazonaws.com"
-        cluster = "demovpro"
-        service = "vpronewsvc"
+        cluster = "vprostaging"
+        service = "vprostagesvc"
     }
 
     stages {
@@ -51,6 +51,7 @@ pipeline {
         stage('Checkstyle Analysis'){
             steps {
                 sh 'mvn checkstyle:checkstyle'
+                //tescheckt
             }
         }
 
@@ -76,7 +77,7 @@ pipeline {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't
+                    // true = set pipeline to UNSTABLE, false = don'ssdt
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -132,7 +133,7 @@ pipeline {
     post {
         always {
             echo 'Slack Notifications.'
-            slackSend channel: '#slacknotification',
+            slackSend channel: '#jenkins-cicd',
                 color: COLOR_MAP[currentBuild.currentResult],
                 message: "*${currentBuild.currentResult}:* Job ${env.JOB_NAME} build ${env.BUILD_NUMBER} \n More info at: ${env.BUILD_URL}"
         }
