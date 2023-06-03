@@ -21,6 +21,7 @@ pipeline {
      }
 
     }
+    //gitmerge
     post {
         always {
             echo 'Slack Notifications.'
