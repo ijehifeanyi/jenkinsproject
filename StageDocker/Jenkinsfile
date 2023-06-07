@@ -121,9 +121,9 @@ pipeline {
                     // Push the Docker image to Docker Hub
                     docker.withRegistry('https://registry.hub.docker.com', 'dockercreds') {
                         docker.image(java-app + ':' + latest).push()
-              }
+                    }
+                }
             }
-          }
         }
 
         stage('Deploy to ECS staging') {
