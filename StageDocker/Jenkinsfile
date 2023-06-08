@@ -107,10 +107,13 @@ pipeline {
             }
         }
 
-        stage('Build App Image') {
+        
+        stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build( appRegistry + ":$BUILD_NUMBER", "./Docker-files/app/multistage/")
+                    docker.withRegistry('', DOCKER_HUB_CREDENTIALS) {
+                        def customImage = docker.build("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}", "./Docker-files/app/multistage/")
+                    }
                 }
             }
         }
