@@ -26,6 +26,10 @@ pipeline {
         vprofileRegistry = "https://847974153257.dkr.ecr.us-east-1.amazonaws.com"
         cluster = "vprostaging"
         service = "vprostagesvc"
+        DOCKER_HUB_CREDENTIALS = 'dockercreds'
+        DOCKER_IMAGE_NAME = 'java-app'
+        DOCKER_IMAGE_TAG = 'latest'
+        DOCKER_HUB_REPO = 'ijehifeanyi/app'
     }
 
     stages {
@@ -111,15 +115,14 @@ pipeline {
             }
         }
         
-        stage('Push') {
+        stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    def imageName = "ijehifeanyi/java-app"
-                    def imageTag = "latest"
+                    docker.withRegistry("https://index.docker.io/v1/", DOCKER_HUB_CREDENTIALS) {
+                        def customImage = docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
+                        customImage.push()
+                        customImage.push("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")   
                     
-                    // Push the Docker image to Docker Hub
-                    docker.withRegistry('https://registry.hub.docker.com', 'dockercreds') {
-                        docker.image(java-app + ':' + latest).push()
                     }
                 }
             }
