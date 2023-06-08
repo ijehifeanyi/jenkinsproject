@@ -29,7 +29,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'dockercreds'
         DOCKER_IMAGE_NAME = 'java-app'
         DOCKER_IMAGE_TAG = 'latest'
-        DOCKER_HUB_REPO = 'ijehifeanyi/app'
+        DOCKER_HUB_REPO = 'app'
     }
 
     stages {
