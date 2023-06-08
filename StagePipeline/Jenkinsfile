@@ -27,7 +27,7 @@ pipeline {
         cluster = "vprostaging"
         service = "vprostagesvc"
         DOCKER_PASSWORD = 'Default1987@'
-        DOCKER_USERNAME = 'ifyejay@gmail.com'
+        DOCKER_USERNAME = 'ijehifeanyi'
     }
 
     stages {

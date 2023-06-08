@@ -121,7 +121,7 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry("https://index.docker.io/v1/", DOCKER_HUB_CREDENTIALS) {
+                    docker.withRegistry("https://registry.hub.docker.com/", DOCKER_HUB_CREDENTIALS) {
                         def customImage = docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
                         customImage.push()
                         customImage.push("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")   
