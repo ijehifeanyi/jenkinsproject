@@ -29,7 +29,7 @@ pipeline {
         DOCKER_HUB_CREDENTIALS = 'dockercreds'
         DOCKER_IMAGE_NAME = 'java-app'
         DOCKER_IMAGE_TAG = 'latest'
-        DOCKER_HUB_REPO = 'app'
+        DOCKER_HUB_REPO = 'ijehifeanyi/app'
     }
 
     stages {
@@ -121,7 +121,7 @@ pipeline {
         stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry("https://registry.hub.docker.com/", DOCKER_HUB_CREDENTIALS) {
+                    docker.withRegistry("https://hub.docker.com/repository/docker/ijehifeanyi/app/general", DOCKER_HUB_CREDENTIALS) {
                         def customImage = docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
                         customImage.push()
                         customImage.push("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")   
