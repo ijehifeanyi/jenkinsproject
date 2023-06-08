@@ -114,7 +114,7 @@ pipeline {
         stage('Push') {
             steps {
                 script {
-                    def imageName = "ifyejay@gmail.com/java-app"
+                    def imageName = "ijehifeanyi/java-app"
                     def imageTag = "latest"
                     
                     // Push the Docker image to Docker Hub
