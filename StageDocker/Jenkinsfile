@@ -50,7 +50,6 @@ pipeline {
             steps {
                 sh 'mvn test'
             }
-
         }
 
         stage('Checkstyle Analysis'){
@@ -125,24 +124,9 @@ pipeline {
             sh "docker login -u ijehieanyi -p ${DOCKS}"
             }
             sh "docker push ijehifeanyi/app"
-
         }
         
                 
-        /*
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry("https://registry.dockerhub.com", DOCKER_HUB_CREDENTIALS) {
-                        def customImage = docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
-                        customImage.push()
-                        customImage.push("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")   
-                    
-                    }
-                }
-            }
-        }
-        */
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
