@@ -30,8 +30,7 @@ pipeline {
         DOCKER_IMAGE_NAME = 'java-app'
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
-        DOCKERHUB_USERNAME = ijehifeanyi
-        DOCKERHUB_PASSWORD = Default1987@
+        
     }
 
     stages {
@@ -121,15 +120,15 @@ pipeline {
         }
         
         
-        stage('Push') {
-            steps {
-                // Push the Docker image to Docker Hub
-                withCredentials([usernamePassword(credentialsId: 'dockercreds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                }
+        stage('Push'){
+            withCredentials([string(credentialsId: 'DOCKS', variable: 'DOCKER_HUB_CRED')]) {
+            sh "docker login -u ijehieanyi -p ${DOCKS}"
             }
+            sh "docker push ijehifeanyi/app"
+
         }
         
+                
         /*
         stage('Push Docker Image to Docker Hub') {
             steps {
