@@ -119,6 +119,13 @@ pipeline {
                 }
             }
         }
+
+        stage('Tag') {
+            steps {
+                sh 'docker tag java-app ijehifeanyi/app:latest'
+            }
+        }
+        
         
         stage('Push') {
             steps {
