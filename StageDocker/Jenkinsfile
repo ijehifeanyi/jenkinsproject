@@ -30,6 +30,8 @@ pipeline {
         DOCKER_IMAGE_NAME = 'java-app'
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
+        DOCKERHUB_USERNAME = ijehifeanyi
+        DOCKERHUB_PASSWORD = Default1987@
     }
 
     stages {
@@ -118,10 +120,20 @@ pipeline {
             }
         }
         
-        stage('Push Docker Image to Docker Hub') {
+        stage('Push') {
+            steps {
+                // Push the Docker image to Docker Hub
+                withCredentials([usernamePassword(credentialsId: 'dockercreds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                }
+            }
+        }
+        
+        
+        /*stage('Push Docker Image to Docker Hub') {
             steps {
                 script {
-                    docker.withRegistry("https://hub.docker.com/v2/", DOCKER_HUB_CREDENTIALS) {
+                    docker.withRegistry("https://registry.dockerhub.com", DOCKER_HUB_CREDENTIALS) {
                         def customImage = docker.image("${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}")
                         customImage.push()
                         customImage.push("${DOCKER_HUB_REPO}:${DOCKER_IMAGE_TAG}")   
@@ -130,7 +142,7 @@ pipeline {
                 }
             }
         }
-
+        */
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
