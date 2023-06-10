@@ -30,6 +30,8 @@ pipeline {
         DOCKER_IMAGE_NAME = 'java-app'
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
+        DOCKERHUB_PASSWORD = 'Default1987@'
+        DOCKERHUB_USERNAME = 'ijehifeanyi'
         
     }
 
@@ -118,19 +120,16 @@ pipeline {
             }
         }
         
-        
-        stage('Push'){
+        stage('Push') {
             steps {
-                script {
-                    withCredentials([string(credentialsId: 'DOCKS', variable: 'DOCKER_HUB_CRED')]) {
-                        sh "docker login -u ijehieanyi -p ${DOCKS}"
-                    }
-                sh "docker push ijehifeanyi/app"
+                withCredentials([usernamePassword(credentialsId: 'DOCKER_HUB_CREDENTIALS', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
+                    sh 'docker push ijehifeanyi/app:latest'
                 }
             }
         }
-        
-                
+     
+             
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
