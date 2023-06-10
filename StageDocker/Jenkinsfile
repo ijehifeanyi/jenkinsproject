@@ -120,10 +120,14 @@ pipeline {
         
         
         stage('Push'){
-            withCredentials([string(credentialsId: 'DOCKS', variable: 'DOCKER_HUB_CRED')]) {
-            sh "docker login -u ijehieanyi -p ${DOCKS}"
+            steps {
+                script {
+                    withCredentials([string(credentialsId: 'DOCKS', variable: 'DOCKER_HUB_CRED')]) {
+                        sh "docker login -u ijehieanyi -p ${DOCKS}"
+                    }
+                sh "docker push ijehifeanyi/app"
+                }
             }
-            sh "docker push ijehifeanyi/app"
         }
         
                 
