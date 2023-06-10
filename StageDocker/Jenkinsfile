@@ -31,7 +31,7 @@ pipeline {
         DOCKER_IMAGE_TAG = 'latest'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
         DOCKERHUB_USERNAME = ijehifeanyi
-        DOCKERHUB_PASSWORD = Default1987@ 
+        DOCKERHUB_PASSWORD = Default1987@
     }
 
     stages {
