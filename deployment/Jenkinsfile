@@ -151,6 +151,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
           agent {label 'k8s'}
             steps {
+                sh "kubectl create ns test"
                 sh "kubectl apply -f ~/deployment.yml --namespace test"
           }
         }
