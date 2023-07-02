@@ -28,7 +28,7 @@ pipeline {
         service = "vprostagesvc"
         DOCKER_HUB_CREDENTIALS = 'dockercreds'
         DOCKER_IMAGE_NAME = 'java-app'
-        DOCKER_IMAGE_TAG = '1'
+        DOCKER_IMAGE_TAG = '2'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
         DOCKERHUB_PASSWORD = 'Default1987@'
         DOCKERHUB_USERNAME = 'ijehifeanyi'
@@ -151,9 +151,8 @@ pipeline {
         stage('Deploy to Kubernetes') {
           agent {label 'k8s'}
             steps {
-                sh "kubectl create ns test"
                 sh "kubectl apply -f ~/deployment.yml --namespace test"
-          }
+            }
         }
     }
            
