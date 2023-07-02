@@ -28,7 +28,7 @@ pipeline {
         service = "vprostagesvc"
         DOCKER_HUB_CREDENTIALS = 'dockercreds'
         DOCKER_IMAGE_NAME = 'java-app'
-        DOCKER_IMAGE_TAG = 'latest'
+        DOCKER_IMAGE_TAG = '1'
         DOCKER_HUB_REPO = 'ijehifeanyi/app'
         DOCKERHUB_PASSWORD = 'Default1987@'
         DOCKERHUB_USERNAME = 'ijehifeanyi'
@@ -57,7 +57,7 @@ pipeline {
         stage('Checkstyle Analysis'){
             steps {
                 sh 'mvn checkstyle:checkstyle'
-                //tescheckt
+                          
             }
         }
 
@@ -83,7 +83,7 @@ pipeline {
             steps {
                 timeout(time: 1, unit: 'HOURS') {
                     // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don'ssdt
+                    // true = set pipeline to UNSTABLE, false = don'ssdtffregtge3rffr3rrer
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -109,7 +109,7 @@ pipeline {
             }
         }
 
-        
+        //opoptthhrtr
         stage('Build Docker Image') {
             steps {
                 script {
@@ -122,7 +122,7 @@ pipeline {
 
         stage('Tag') {
             steps {
-                sh 'docker tag java-app ijehifeanyi/app:latest'
+                sh 'docker tag $DOCKER_IMAGE_NAME ijehifeanyi/app:$DOCKER_IMAGE_TAG'
             }
         }
         
@@ -131,12 +131,13 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'dockercreds', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
                     sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                    sh 'docker push ijehifeanyi/app:latest'
+                    sh 'docker push ijehifeanyi/app:$DOCKER_IMAGE_TAG'
                 }
             }
         }
-     
-             
+
+           
+    /*
         stage('Deploy to ECS staging') {
             steps {
                 withAWS(credentials: 'awscreds', region: 'us-east-1') {
@@ -144,9 +145,18 @@ pipeline {
                 } 
             }
         }
-
-        stage("Kubernetes Deployment")
     }
+    */
+
+        stage('Deploy to Kubernetes') {
+          agent {label 'k8s'}
+            steps {
+                sh "kubectl apply -f apps/deployment.yml --namespace test"
+          }
+        }
+    }
+           
+    
     post {
         always {
             echo 'Slack Notifications.'
