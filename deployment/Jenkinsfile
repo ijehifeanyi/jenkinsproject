@@ -47,7 +47,7 @@ pipeline {
                 }
             }
         }
-
+        /*
         stage('Test'){
             steps {
                 sh 'mvn test'
@@ -60,7 +60,7 @@ pipeline {
                           
             }
         }
-        /*
+        
         stage('Sonar Analysis') {
             environment {
                 scannerHome = tool "${SONARSCANNER}"
@@ -151,7 +151,7 @@ pipeline {
         stage('Deploy to Kubernetes') {
           agent {label 'k8s'}
             steps {
-                sh "kubectl apply -f deployment.yml --namespace test"
+                sh "kubectl apply -f ~/deployment.yml --namespace test"
           }
         }
     }
